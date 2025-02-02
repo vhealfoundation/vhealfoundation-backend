@@ -6,7 +6,7 @@ const storyContentSchema = new mongoose.Schema({
     required: [true, "Content image is required"],
   },
   title: {
-    type: String,
+    type: String, 
     required: [true, "Content title is required"],
   },
   description: {
