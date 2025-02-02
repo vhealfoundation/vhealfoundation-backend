@@ -13,7 +13,7 @@ const storyContentSchema = new mongoose.Schema({
     type: String,
     required: [true, "Content description is required"],
   },
-});
+}); 
 
 const storySchema = new mongoose.Schema({
   coverimage: {
