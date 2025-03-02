@@ -26,6 +26,7 @@ const beneficiaryRoutes = require("./routes/beneficiaryRoutes");
 const donationRoutes = require("./routes/donationRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
+const appointmentRoutes = require("./routes/appointmentRoutes");
 
 
 app.use('/api/v1', sectionRoutes);
@@ -38,6 +39,7 @@ app.use('/api/v1', beneficiaryRoutes);
 app.use('/api/v1', donationRoutes);
 app.use('/api/v1', paymentRoutes);
 app.use('/api/v1', dashboardRoutes);
+app.use('/api/v1', appointmentRoutes);
 
 module.exports = app;
  
