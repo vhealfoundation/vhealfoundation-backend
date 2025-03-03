@@ -25,6 +25,10 @@ const appointmentSchema = new mongoose.Schema({
             type: String,
             default: "",
           },
+          phone: {
+            type: String,
+            default: "",
+          },
         },
         paymentStatus: {
           type: String,

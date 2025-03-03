@@ -66,7 +66,7 @@ exports.updateDonationStatus = asyncErrorHandler(async (req, res, next) => {
 exports.getDonationsByEmail = asyncErrorHandler(async (req, res, next) => {
   const { email } = req.params;
 
-  const donations = await Donation.find({ email }).populate("beneficiary", "name");
+  const donations = await Donation.find({ email }).populate("beneficiary", "name image");
 
   if (donations.length === 0) {
     return res.status(404).json({

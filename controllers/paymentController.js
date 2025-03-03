@@ -4,7 +4,7 @@ const Payment = require("../models/paymentModel");
 const Beneficiary = require("../models/beneficiaryModel");
 const Donation = require("../models/donationModel");
 const asyncErrorHandler = require("../middlewares/asyncErrorHandler");
-
+const sendEmail = require("../utils/sendEmail");
 // Initialize Razorpay
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -85,8 +85,8 @@ exports.verifyPayment = asyncErrorHandler(async (req, res, next) => {
     payment.status = "Paid"; // Update payment status
     await payment.save();
 
-     // Save details to the Donations collection
-     const donation = await Donation.create({
+    // Save details to the Donations collection
+    const donation = await Donation.create({
       name: payment.donorName,
       email: payment.donorEmail,
       phone: payment.donorPhone,
@@ -102,9 +102,51 @@ exports.verifyPayment = asyncErrorHandler(async (req, res, next) => {
       await beneficiary.save();
     }
 
+    // Email Content
+    const emailContent = `
+      <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+        <div style="max-width: 600px; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+          <div style="background-color: #003153; padding: 15px; border-radius: 10px 10px 0 0; text-align: center;">
+            <h2 style="color: #fff; margin: 0;">Thank You for Your Donation!</h2>
+          </div>
+          <div style="padding: 20px;">
+            <p style="font-size: 16px; color: #333;">Dear <strong>${payment.donorName}</strong>,</p>
+            <p style="font-size: 16px; color: #555;">
+              Your generous donation of <strong>₹${payment.amount}</strong> has been successfully processed.
+            </p>
+            <p style="font-size: 16px; color: #555;">
+              <strong>Beneficiary:</strong> ${beneficiary.name} <br>
+              <strong>Transaction ID:</strong> ${razorpayPaymentId}
+            </p>
+            <p style="font-size: 16px; color: #555;">
+              Your support means the world to us and will make a significant impact. Thank you for your kindness and generosity!
+            </p>
+            <div style="text-align: center; margin-top: 20px;">
+              <a href="https://yourwebsite.com" 
+                 style="background-color: #003153; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-size: 16px;">
+                Visit Our Website
+              </a>
+            </div>
+          </div>
+          <div style="background-color: #f4f4f4; padding: 15px; text-align: center; border-radius: 0 0 10px 10px;">
+            <p style="font-size: 14px; color: #777; margin: 0;">
+              If you have any questions, feel free to <a href="mailto:support@yourwebsite.com" style="color: #003153; text-decoration: none;">contact us</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Send the email
+    await sendEmail({
+      email: payment.donorEmail,
+      subject: "Donation Successful - Thank You!",
+      message: emailContent,
+    });
+
     res.status(200).json({
       success: true,
-      message: "Payment verified successfully",
+      message: "Payment verified successfully and email sent.",
       payment,
     });
   } else {
