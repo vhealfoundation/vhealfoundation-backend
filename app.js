@@ -8,7 +8,7 @@ const cookieParser = require('cookie-parser');
 const app = express();
 
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://localhost:3001','https://vhealfoundations.web.app', 'https://vhealfoundationsadmin.web.app'],
+    origin: ['http://localhost:3000', 'http://localhost:3001','https://vhealfoundation.org','https://vhealfoundations.web.app', 'https://vhealfoundationsadmin.web.app'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type'],
   }));
