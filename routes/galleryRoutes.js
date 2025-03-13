@@ -1,21 +1,33 @@
 const express = require("express");
 const {
   getGallery,
-  addImageToGallery,
-  deleteImageFromGallery,
+  getGalleryByCategory,
+  addCategory,
+  addImageToCategory,
+  deleteImageFromCategory,
+  deleteCategory,
   deleteGallery,
 } = require("../controllers/galleryController");
 
 const router = express.Router();
 
-// Get the gallery
+// Get the entire gallery with all categories
 router.route("/gallery").get(getGallery);
 
-// Add a new image to the gallery
-router.route("/gallery").post(addImageToGallery);
+// Get images by category
+router.route("/gallery/category/:category").get(getGalleryByCategory);
 
-// Delete a specific image from the gallery
-router.route("/gallery/:id").delete(deleteImageFromGallery);
+// Add a new category
+router.route("/gallery/category").post(addCategory);
+
+// Add images to a specific category
+router.route("/gallery/category/:category/images").post(addImageToCategory);
+
+// Delete a specific image from a category
+router.route("/gallery/category/:category/image/:imageId").delete(deleteImageFromCategory);
+
+// Delete an entire category
+router.route("/gallery/category/:category").delete(deleteCategory);
 
 // Delete the entire gallery
 router.route("/gallery").delete(deleteGallery);
