@@ -24,10 +24,10 @@ const storySchema = new mongoose.Schema({
     type: String,
     required: [true, "Story title is required"],
   },
-  description: {
+/*   description: {
     type: String,
     required: [true, "Story description is required"],
-  },
+  }, */
   content: {
     type: [storyContentSchema],
     required: [true, "Content is required"],
