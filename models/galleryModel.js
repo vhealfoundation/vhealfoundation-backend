@@ -11,7 +11,7 @@ const gallerySchema = new mongoose.Schema({
           "ASSESSMENTS",
           "TRAINING",
           "COACHING",
-          "REHABILITAION OF PRISONERS",
+          "REHABILITATION OF PRISONERS",
           "OTHER"
         ]
       },

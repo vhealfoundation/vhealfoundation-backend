@@ -9,7 +9,7 @@ The gallery supports the following predefined categories:
 - ASSESSMENTS
 - TRAINING
 - COACHING
-- REHABILITAION OF PRISONERS
+- REHABILITATION OF PRISONERS
 - OTHER
 
 ## API Endpoints
