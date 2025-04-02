@@ -161,6 +161,95 @@ exports.addImageToCategory = asyncErrorHandler(async (req, res, next) => {
   });
 });
 
+
+// Update image caption in a specific category
+exports.updateImageCaption = asyncErrorHandler(async (req, res, next) => {
+  console.log('Starting updateImageCaption with params:', req.params);
+  console.log('Request body:', req.body);
+
+  const { category, imageId } = req.params;
+  const { caption } = req.body;
+
+  if (!caption) {
+    console.log('Caption missing in request');
+    return res.status(400).json({
+      success: false,
+      message: "Caption is required",
+    });
+  }
+
+  // Define allowed categories (matching the enum in galleryModel.js)
+  const allowedCategories = [
+    "COUNSELLING SERVICES",
+    "ASSESSMENTS",
+    "TRAINING",
+    "COACHING",
+    "REHABILITATION OF PRISONERS",
+    "OTHER"
+  ];
+
+  // Validate category name
+  if (!allowedCategories.includes(category)) {
+    console.log(`Invalid category name: ${category}`);
+    console.log('Allowed categories:', allowedCategories);
+    return res.status(400).json({
+      success: false,
+      message: `Invalid category name. Must be one of: ${allowedCategories.join(', ')}`
+    });
+  }
+
+  console.log(`Attempting to update caption for image ${imageId} in category: ${category}`);
+
+  let gallery = await Gallery.findOne();
+
+  if (!gallery) {
+    console.log('Gallery not found');
+    return res.status(404).json({
+      success: false,
+      message: "Gallery not found",
+    });
+  }
+
+  console.log('Current gallery categories:', gallery.categories.map(cat => cat.title));
+  
+  // Find the category
+  const categoryIndex = gallery.categories.findIndex(cat => cat.title === category);
+  
+  if (categoryIndex === -1) {
+    console.log(`Category '${category}' not found`);
+    return res.status(404).json({
+      success: false,
+      message: `Category '${category}' not found`,
+    });
+  }
+
+  // Find the image in the category
+  const imageIndex = gallery.categories[categoryIndex].images.findIndex(
+    img => img._id.toString() === imageId
+  );
+
+  if (imageIndex === -1) {
+    console.log(`Image ${imageId} not found in category ${category}`);
+    return res.status(404).json({
+      success: false,
+      message: `Image not found in category '${category}'`,
+    });
+  }
+
+  console.log('Updating caption:', caption);
+  // Update the caption
+  gallery.categories[categoryIndex].images[imageIndex].caption = caption;
+
+  console.log('Saving gallery...');
+  await gallery.save();
+  console.log('Gallery saved successfully');
+
+  res.status(200).json({
+    success: true,
+    data: gallery,
+  });
+});
+
 // Delete a specific image from a category
 exports.deleteImageFromCategory = asyncErrorHandler(async (req, res, next) => {
   const { category, imageId } = req.params;

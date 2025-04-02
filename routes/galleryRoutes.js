@@ -4,6 +4,7 @@ const {
   getGalleryByCategory,
   addCategory,
   addImageToCategory,
+  updateImageCaption,
   deleteImageFromCategory,
   deleteCategory,
   deleteGallery,
@@ -22,6 +23,10 @@ router.route("/gallery/category").post(addCategory);
 
 // Add images to a specific category
 router.route("/gallery/category/:category/images").post(addImageToCategory);
+
+// Update image caption in a category
+router.route("/gallery/category/:category/image/:imageId/caption")
+  .put(updateImageCaption);
 
 // Delete a specific image from a category
 router.route("/gallery/category/:category/image/:imageId").delete(deleteImageFromCategory);
