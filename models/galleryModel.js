@@ -12,7 +12,7 @@ const gallerySchema = new mongoose.Schema({
           "TRAINING",
           "COACHING",
           "REHABILITATION OF PRISONERS",
-          "OTHER"
+          "LATEST BLOGS"
         ]
       },
       images: [

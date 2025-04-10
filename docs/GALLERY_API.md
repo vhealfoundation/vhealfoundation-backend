@@ -10,7 +10,7 @@ The gallery supports the following predefined categories:
 - TRAINING
 - COACHING
 - REHABILITATION OF PRISONERS
-- OTHER
+- LATEST BLOGS
 
 ## API Endpoints
 

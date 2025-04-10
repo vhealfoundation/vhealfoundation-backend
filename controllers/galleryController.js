@@ -101,7 +101,7 @@ exports.addImageToCategory = asyncErrorHandler(async (req, res, next) => {
     "TRAINING",
     "COACHING",
     "REHABILITATION OF PRISONERS",
-    "OTHER"
+    "LATEST BLOGS"
   ];
 
   // Validate category name
@@ -185,7 +185,7 @@ exports.updateImageCaption = asyncErrorHandler(async (req, res, next) => {
     "TRAINING",
     "COACHING",
     "REHABILITATION OF PRISONERS",
-    "OTHER"
+    "LATEST BLOGS"
   ];
 
   // Validate category name
