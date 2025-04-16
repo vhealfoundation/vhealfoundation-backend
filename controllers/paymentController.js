@@ -7,8 +7,8 @@ const asyncErrorHandler = require("../middlewares/asyncErrorHandler");
 const sendEmail = require("../utils/sendEmail");
 // Initialize Razorpay
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
+  key_id: process.env.DONATION_RAZORPAY_KEY_ID,
+  key_secret: process.env.DONATION_RAZORPAY_KEY_SECRET,
 });
 
 // Create Razorpay order and save payment
@@ -73,7 +73,7 @@ exports.verifyPayment = asyncErrorHandler(async (req, res, next) => {
 
   // Verify the Razorpay signature using the secret key
   const body = razorpayOrderId + "|" + razorpayPaymentId;  
-  const secret = process.env.RAZORPAY_KEY_SECRET;  
+  const secret = process.env.DONATION_RAZORPAY_KEY_SECRET;  
   const expectedSignature = crypto
     .createHmac('sha256', secret)
     .update(body)
@@ -122,7 +122,7 @@ exports.verifyPayment = asyncErrorHandler(async (req, res, next) => {
               Your support means the world to us and will make a significant impact. Thank you for your kindness and generosity!
             </p>
             <div style="text-align: center; margin-top: 20px;">
-              <a href="https://yourwebsite.com" 
+              <a href="https://vhealfoundation.org/" 
                  style="background-color: #003153; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-size: 16px;">
                 Visit Our Website
               </a>
@@ -130,7 +130,7 @@ exports.verifyPayment = asyncErrorHandler(async (req, res, next) => {
           </div>
           <div style="background-color: #f4f4f4; padding: 15px; text-align: center; border-radius: 0 0 10px 10px;">
             <p style="font-size: 14px; color: #777; margin: 0;">
-              If you have any questions, feel free to <a href="mailto:support@yourwebsite.com" style="color: #003153; text-decoration: none;">contact us</a>.
+              If you have any questions, feel free to <a href="mailto:vhealfoundation@gmail.com" style="color: #003153; text-decoration: none;">contact us</a>.
             </p>
           </div>
         </div>

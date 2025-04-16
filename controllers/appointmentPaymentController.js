@@ -7,8 +7,8 @@ const sendEmail = require("../utils/sendEmail");
 
 // Initialize Razorpay instance
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
+  key_id: process.env.APPOINTMENT_RAZORPAY_KEY_ID,
+  key_secret: process.env.APPOINTMENT_RAZORPAY_KEY_SECRET,
 });
 
 /**
@@ -92,7 +92,7 @@ exports.verifyAppointmentPayment = asyncErrorHandler(async (req, res, next) => {
 
   // Verify the Razorpay signature using the secret key
   const body = razorpayOrderId + "|" + razorpayPaymentId;
-  const secret = process.env.RAZORPAY_KEY_SECRET;
+  const secret = process.env.APPOINTMENT_RAZORPAY_KEY_SECRET;
   const expectedSignature = crypto
     .createHmac("sha256", secret)
     .update(body)
@@ -135,7 +135,7 @@ exports.verifyAppointmentPayment = asyncErrorHandler(async (req, res, next) => {
               Your appointment has been successfully booked.
             </p>
             <p style="font-size: 16px; color: #555;">
-              <strong>Appointment Date:</strong> ${appointment.date} <br>
+              <strong>Appointment Date:</strong> ${new Date(appointment.date).toLocaleDateString('en-GB')} <br>
               <strong>Time Slot:</strong> ${appointmentPayment.slotTime} <br>
               <strong>Transaction ID:</strong> ${razorpayPaymentId} <br>
               <strong>Amount Paid:</strong> ₹${appointmentPayment.amount}
@@ -144,7 +144,7 @@ exports.verifyAppointmentPayment = asyncErrorHandler(async (req, res, next) => {
               Thank you for choosing our services. If you have any questions, feel free to reach out.
             </p>
             <div style="text-align: center; margin-top: 20px;">
-              <a href="https://yourwebsite.com" 
+              <a href="https://vhealfoundation.org/"
                  style="background-color: #003153; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-size: 16px;">
                 Visit Our Website
               </a>
@@ -152,7 +152,7 @@ exports.verifyAppointmentPayment = asyncErrorHandler(async (req, res, next) => {
           </div>
           <div style="background-color: #f4f4f4; padding: 15px; text-align: center; border-radius: 0 0 10px 10px;">
             <p style="font-size: 14px; color: #777; margin: 0;">
-              If you have any questions, feel free to <a href="mailto:support@yourwebsite.com" style="color: #003153; text-decoration: none;">contact us</a>.
+              If you have any questions, feel free to <a href="mailto:vhealfoundation@gmail.com" style="color: #003153; text-decoration: none;">contact us</a>.
             </p>
           </div>
         </div>
@@ -175,7 +175,7 @@ exports.verifyAppointmentPayment = asyncErrorHandler(async (req, res, next) => {
               <strong>User:</strong> ${appointmentPayment.userName} <br>
               <strong>Email:</strong> ${appointmentPayment.userEmail} <br>
               <strong>Phone:</strong> ${appointmentPayment.userPhone} <br>
-              <strong>Appointment Date:</strong> ${appointment.date} <br>
+              <strong>Appointment Date:</strong> ${new Date(appointment.date).toLocaleDateString('en-GB')} <br>
               <strong>Time Slot:</strong> ${appointmentPayment.slotTime} <br>
               <strong>Transaction ID:</strong> ${razorpayPaymentId} <br>
               <strong>Amount Paid:</strong> ₹${appointmentPayment.amount}
@@ -184,17 +184,13 @@ exports.verifyAppointmentPayment = asyncErrorHandler(async (req, res, next) => {
               Please review the appointment details in the admin panel.
             </p>
             <div style="text-align: center; margin-top: 20px;">
-              <a href="https://yourwebsite.com/admin" 
+              <a href="https://vhealfoundationsadmin.web.app/login"
                  style="background-color: #003153; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-size: 16px;">
                 Admin Dashboard
               </a>
             </div>
           </div>
-          <div style="background-color: #f4f4f4; padding: 15px; text-align: center; border-radius: 0 0 10px 10px;">
-            <p style="font-size: 14px; color: #777; margin: 0;">
-              If you have any questions, feel free to <a href="mailto:support@yourwebsite.com" style="color: #003153; text-decoration: none;">contact us</a>.
-            </p>
-          </div>
+         
         </div>
       </div>
     `;

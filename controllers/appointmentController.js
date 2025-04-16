@@ -94,7 +94,8 @@ exports.getAppointmentsByDate = asyncErrorHandler(async (req, res, next) => {
   let slotEntry = await Appointment.findOne({ date });
 
   if (slotEntry) {
-    slotEntry.slots = slotEntry.slots.filter(slot => !slot.booked);
+    // Don't filter out booked slots - we need to show all slots for editing
+    // slotEntry.slots = slotEntry.slots.filter(slot => !slot.booked);
   }
 
   res.status(200).json({ success: true, slot: slotEntry || { date, slots: [], message: "No slots available" } });
@@ -156,12 +157,15 @@ exports.editSlot = asyncErrorHandler(async (req, res, next) => {
     appointmentEntry = new Appointment({ date: formattedDate, slots: [] });
   }
 
+  // Handle adding a new slot
   if (slotId === "new" && time) { // Ensure 'time' is provided
+    // Check for duplicate time slots
     const duplicate = appointmentEntry.slots.some(slot => slot.time.trim() === time);
     if (duplicate) {
       return res.status(400).json({ success: false, message: "Duplicate slot timing not allowed" });
     }
 
+    // Create a new slot with default values
     const newSlot = {
       time,
       booked: false,
@@ -170,6 +174,7 @@ exports.editSlot = asyncErrorHandler(async (req, res, next) => {
       completed: completed ? completed.toString().toLowerCase() === "true" : false,
     };
 
+    // Add the new slot to the appointment
     appointmentEntry.slots.push(newSlot);
     await appointmentEntry.save();
 
@@ -177,13 +182,13 @@ exports.editSlot = asyncErrorHandler(async (req, res, next) => {
     return res.status(200).json({ success: true, message: "Slot added successfully", slot: newSlot });
   }
 
-
   // If slotId is not "new", update or remove an existing slot
   const slot = appointmentEntry.slots.id(slotId);
   if (!slot) {
     return res.status(404).json({ success: false, message: "Slot not found" });
   }
 
+  // Handle removing a slot
   if (remove) {
     appointmentEntry.slots.pull(slotId);
     await appointmentEntry.save();
@@ -191,11 +196,15 @@ exports.editSlot = asyncErrorHandler(async (req, res, next) => {
     return res.status(200).json({ success: true, message: "Slot removed successfully" });
   }
 
-  // Update existing slot
-  slot.time = time || slot.time;
-  slot.userDetails = userDetails || slot.userDetails;
-  slot.paymentStatus = paymentStatus || slot.paymentStatus;
-  slot.completed = completed ? completed.toString().toLowerCase() === "true" : slot.completed;
+  // Update existing slot properties
+  if (time) slot.time = time;
+  if (userDetails) slot.userDetails = userDetails;
+  if (paymentStatus) slot.paymentStatus = paymentStatus;
+  if (completed !== undefined) {
+    slot.completed = typeof completed === "string" 
+      ? completed.toLowerCase() === "true" 
+      : Boolean(completed);
+  }
 
   await appointmentEntry.save();
   console.log("Slot updated:", slot);
