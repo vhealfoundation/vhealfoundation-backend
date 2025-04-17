@@ -11,6 +11,7 @@ const razorpay = new Razorpay({
   key_secret: process.env.APPOINTMENT_RAZORPAY_KEY_SECRET,
 });
 
+
 /**
  * Create a Razorpay order for an appointment payment and save the appointment payment details.
  */

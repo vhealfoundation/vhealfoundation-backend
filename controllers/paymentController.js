@@ -5,6 +5,10 @@ const Beneficiary = require("../models/beneficiaryModel");
 const Donation = require("../models/donationModel");
 const asyncErrorHandler = require("../middlewares/asyncErrorHandler");
 const sendEmail = require("../utils/sendEmail");
+
+console.log(process.env.DONATION_RAZORPAY_KEY_ID);
+console.log(process.env.DONATION_RAZORPAY_KEY_SECRET);
+
 // Initialize Razorpay
 const razorpay = new Razorpay({
   key_id: process.env.DONATION_RAZORPAY_KEY_ID,
