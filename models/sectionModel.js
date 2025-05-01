@@ -15,7 +15,7 @@ const sectionSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: [true, "Description is required"],
+    required: [ false, "Description is not required"]
   },
   features: {
     type: [String],
